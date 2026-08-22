@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useStore } from '../../store/useStore.js'
 
 export default function PDFPreview() {
@@ -5,6 +6,8 @@ export default function PDFPreview() {
   const isCompiling = useStore((s) => s.isCompiling)
   const compile = useStore((s) => s.compile)
   const compilationError = useStore((s) => s.compilationError)
+  const latexCode = useStore((s) => s.latexCode)
+  const overleafFormRef = useRef(null)
 
   return (
     <div style={{
@@ -91,12 +94,27 @@ export default function PDFPreview() {
               </svg>
             </div>
             <div className="empty-state-title" style={{ color: 'var(--error)' }}>Compilation failed</div>
-            <div className="empty-state-desc">
-              Check the compilation log below for error details. Common issues: missing packages, syntax errors, unclosed braces.
+            <div className="empty-state-desc" style={{ maxWidth: 350 }}>
+              The compilation service is currently unavailable.
+              You can instantly compile your document on Overleaf using the button below.
             </div>
-            <button className="btn btn-secondary btn-sm" style={{ marginTop: 4 }} onClick={compile}>
-              Retry
-            </button>
+            <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+              <button className="btn btn-secondary btn-sm" onClick={compile}>
+                Retry Local
+              </button>
+              <button className="btn btn-primary btn-sm" onClick={() => overleafFormRef.current?.submit()}>
+                Compile on Overleaf
+              </button>
+            </div>
+            <form 
+              ref={overleafFormRef} 
+              action="https://www.overleaf.com/docs" 
+              method="POST" 
+              target="_blank" 
+              style={{ display: 'none' }}
+            >
+              <input type="hidden" name="snip" value={latexCode} />
+            </form>
           </div>
         )}
 
