@@ -1,6 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Editor, { loader } from '@monaco-editor/react'
 import { useStore } from '../../store/useStore.js'
+
+const WEAK_WORDS = [
+  { word: "helped", suggestion: "Collaborated, Supported, or Facilitated" },
+  { word: "worked on", suggestion: "Engineered, Developed, or Spearheaded" },
+  { word: "did", suggestion: "Executed, Performed, or Completed" },
+  { word: "made", suggestion: "Created, Architected, or Designed" },
+  { word: "team player", suggestion: "Focus on specific collaborative achievements instead of clichés." },
+  { word: "hard worker", suggestion: "Show, don't tell. Highlight results and impact." },
+  { word: "responsible for", suggestion: "Managed, Directed, or Oversaw" },
+  { word: "duties included", suggestion: "Use action verbs directly (e.g. 'Managed...')" },
+  { word: "synergy", suggestion: "Avoid corporate jargon. Be specific." }
+]
 
 // Pin Monaco to a specific CDN version to avoid loading failures
 loader.config({
@@ -102,8 +114,13 @@ export default function MonacoEditor() {
   const setLatexCode = useStore((s) => s.setLatexCode)
   const compile = useStore((s) => s.compile)
   const [isDragging, setIsDragging] = useState(false)
+  const editorRef = useRef(null)
+  const monacoRef = useRef(null)
 
   const handleMount = (editor, monaco) => {
+    editorRef.current = editor
+    monacoRef.current = monaco
+
     // Ctrl+Enter = compile
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
       compile()
@@ -113,6 +130,33 @@ export default function MonacoEditor() {
       compile()
     })
   }
+
+  // Linter effect
+  useEffect(() => {
+    if (!editorRef.current || !monacoRef.current) return
+    const model = editorRef.current.getModel()
+    if (!model) return
+
+    const markers = []
+    WEAK_WORDS.forEach(({ word, suggestion }) => {
+      const regex = new RegExp(`\\b${word}\\b`, 'gi')
+      let match
+      while ((match = regex.exec(latexCode)) !== null) {
+        const startPos = model.getPositionAt(match.index)
+        const endPos = model.getPositionAt(match.index + match[0].length)
+        markers.push({
+          startLineNumber: startPos.lineNumber,
+          startColumn: startPos.column,
+          endLineNumber: endPos.lineNumber,
+          endColumn: endPos.column,
+          message: `Weak phrasing detected: "${match[0]}". Suggestion: ${suggestion}`,
+          severity: monacoRef.current.MarkerSeverity.Warning,
+          source: 'ResumeTeX Action Linter'
+        })
+      }
+    })
+    monacoRef.current.editor.setModelMarkers(model, 'owner', markers)
+  }, [latexCode])
 
   const handleDragOver = (e) => {
     e.preventDefault()

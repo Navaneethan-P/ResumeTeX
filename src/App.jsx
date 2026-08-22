@@ -16,6 +16,26 @@ export default function App() {
   const showThemePicker = useStore((s) => s.showThemePicker)
   const splitPos = useStore((s) => s.splitPos)
   const setSplitPos = useStore((s) => s.setSplitPos)
+  const latexCode = useStore((s) => s.latexCode)
+  const setLatexCode = useStore((s) => s.setLatexCode)
+
+  const handleMagicFit = useCallback(() => {
+    let newCode = latexCode
+    
+    // Adjust geometry package if present
+    if (/\\usepackage\[(.*?)\]\{geometry\}/s.test(newCode)) {
+      newCode = newCode.replace(/\\usepackage\[(.*?)\]\{geometry\}/s, '\\usepackage[top=0.3in, bottom=0.3in, left=0.4in, right=0.4in]{geometry}')
+    } else if (newCode.includes('\\usepackage{geometry}')) {
+      newCode = newCode.replace('\\usepackage{geometry}', '\\usepackage[top=0.3in, bottom=0.3in, left=0.4in, right=0.4in]{geometry}')
+    }
+
+    // Adjust enumitem setlist if present
+    if (/\\setlist\[itemize\]\{.*?\}/s.test(newCode)) {
+      newCode = newCode.replace(/\\setlist\[itemize\]\{.*?\}/s, '\\setlist[itemize]{leftmargin=1.15em, itemsep=0pt, topsep=0pt, parsep=0pt, partopsep=0pt}')
+    }
+
+    setLatexCode(newCode)
+  }, [latexCode, setLatexCode])
 
   const containerRef = useRef(null)
   const isDragging = useRef(false)
@@ -91,6 +111,17 @@ export default function App() {
               Editor
             </span>
             <span style={{ fontSize: 11, color: 'var(--text-3)', marginLeft: 4 }}>LaTeX</span>
+            
+            <div style={{ flex: 1 }} />
+            
+            <button 
+              className="btn btn-ghost btn-sm"
+              onClick={handleMagicFit}
+              data-tooltip="Automatically compress spacing to fit on one page"
+              style={{ fontSize: 11, padding: '0 8px' }}
+            >
+              🪄 Magic Fit
+            </button>
           </div>
 
           {/* Monaco */}
