@@ -12,6 +12,8 @@ export default function Header() {
   const atsScore = useStore((s) => s.atsScore)
   const currentThemeId = useStore((s) => s.currentThemeId)
   const themes = useStore((s) => s.themes)
+  const pdfUrl = useStore((s) => s.pdfUrl)
+  const pdfMode = useStore((s) => s.pdfMode)
 
   const currentTheme = themes.find((t) => t.id === currentThemeId)
   const score = atsScore?.score ?? 0
@@ -168,7 +170,7 @@ export default function Header() {
         style={{ gap: 7 }}
       >
         {isCompiling ? (
-          <><div className="spinner" style={{ width: 12, height: 12, borderWidth: 2 }} />Compiling...</>
+          <><div className="spinner" style={{ width: 12, height: 12, borderWidth: 2, borderTopColor: '#000', borderColor: 'rgba(0,0,0,0.3)' }} />Compiling...</>
         ) : (
           <>
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -178,6 +180,22 @@ export default function Header() {
           </>
         )}
       </button>
+
+      {/* Download PDF button (visible only if compiled) */}
+      {pdfUrl && pdfMode === 'blob' && (
+        <a
+          href={pdfUrl}
+          download="resume.pdf"
+          className="btn btn-secondary"
+          style={{ gap: 7, textDecoration: 'none' }}
+          data-tooltip="Download compiled PDF"
+        >
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M6.5 2v7M4 7l2.5 2.5L9 7M3 11h7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Download PDF
+        </a>
+      )}
 
       {/* Privacy indicator */}
       <div

@@ -4,8 +4,10 @@ import { creativeDesign } from './creativeDesign.js'
 import { academicCV } from './academicCV.js'
 import { technicalEngineering } from './technicalEngineering.js'
 import { executive } from './executive.js'
+import { internNewGrad } from './internNewGrad.js'
 
 export const templates = [
+  internNewGrad,
   modernMinimal,
   corporateTraditional,
   creativeDesign,

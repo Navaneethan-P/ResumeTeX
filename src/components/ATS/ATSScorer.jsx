@@ -28,8 +28,17 @@ export default function ATSScorer() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           {/* Circular progress */}
-          <svg width="64" height="64" viewBox="0 0 64 64" style={{ flexShrink: 0 }}>
-            <circle cx="32" cy="32" r="26" fill="none" stroke="var(--bg-3)" strokeWidth="5" />
+          <svg width="64" height="64" viewBox="0 0 64 64" style={{ flexShrink: 0, overflow: 'visible' }}>
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <circle cx="32" cy="32" r="26" fill="none" stroke="var(--bg-3)" strokeWidth="4" />
             <circle
               cx="32" cy="32" r="26"
               fill="none"
@@ -38,9 +47,10 @@ export default function ATSScorer() {
               strokeLinecap="round"
               strokeDasharray={circumference}
               strokeDashoffset={offset}
-              style={{ transform: 'rotate(-90deg)', transformOrigin: '32px 32px', transition: 'stroke-dashoffset 0.6s ease' }}
+              filter="url(#glow)"
+              style={{ transform: 'rotate(-90deg)', transformOrigin: '32px 32px', transition: 'stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1)' }}
             />
-            <text x="32" y="36" textAnchor="middle" fontSize="13" fontWeight="700" fill={color}>{score}</text>
+            <text x="32" y="37" textAnchor="middle" fontSize="14" fontWeight="800" fill={color}>{score}</text>
           </svg>
 
           <div>

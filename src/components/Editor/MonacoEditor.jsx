@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import Editor, { loader } from '@monaco-editor/react'
 import { useStore } from '../../store/useStore.js'
 
@@ -100,6 +101,7 @@ export default function MonacoEditor() {
   const latexCode = useStore((s) => s.latexCode)
   const setLatexCode = useStore((s) => s.setLatexCode)
   const compile = useStore((s) => s.compile)
+  const [isDragging, setIsDragging] = useState(false)
 
   const handleMount = (editor, monaco) => {
     // Ctrl+Enter = compile
@@ -112,44 +114,113 @@ export default function MonacoEditor() {
     })
   }
 
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const file = e.dataTransfer.files?.[0]
+    if (!file) return
+
+    if (file.name.endsWith('.tex') || file.type.includes('text') || file.type === '') {
+      const reader = new FileReader()
+      reader.onload = (ev) => {
+        const text = ev.target?.result
+        if (typeof text === 'string') {
+          setLatexCode(text)
+        }
+      }
+      reader.readAsText(file)
+    }
+  }
+
   return (
-    <Editor
-      height="100%"
-      language="latex"
-      value={latexCode}
-      onChange={(val) => setLatexCode(val || '')}
-      beforeMount={beforeMount}
-      onMount={handleMount}
-      theme="resumetex-dark"
-      options={{
-        fontSize: 13,
-        fontFamily: "'JetBrains Mono', 'Courier New', monospace",
-        fontLigatures: true,
-        lineNumbers: 'on',
-        minimap: { enabled: true, scale: 0.7 },
-        scrollBeyondLastLine: false,
-        wordWrap: 'on',
-        automaticLayout: true,
-        tabSize: 2,
-        insertSpaces: true,
-        renderWhitespace: 'none',
-        bracketPairColorization: { enabled: true },
-        autoClosingBrackets: 'always',
-        autoClosingQuotes: 'always',
-        suggestOnTriggerCharacters: true,
-        quickSuggestions: { other: true, comments: false, strings: false },
-        padding: { top: 12, bottom: 12 },
-        scrollbar: {
-          verticalScrollbarSize: 6,
-          horizontalScrollbarSize: 6,
-        },
-        overviewRulerLanes: 0,
-        renderLineHighlight: 'line',
-        cursorBlinking: 'smooth',
-        cursorSmoothCaretAnimation: 'on',
-        smoothScrolling: true,
-        contextmenu: true,
-      }}
-    />
+    <div
+      style={{ position: 'relative', width: '100%', height: '100%' }}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      <Editor
+        height="100%"
+        language="latex"
+        value={latexCode}
+        onChange={(val) => setLatexCode(val || '')}
+        beforeMount={beforeMount}
+        onMount={handleMount}
+        theme="resumetex-dark"
+        options={{
+          fontSize: 13,
+          fontFamily: "'JetBrains Mono', 'Courier New', monospace",
+          fontLigatures: true,
+          lineNumbers: 'on',
+          minimap: { enabled: true, scale: 0.7 },
+          scrollBeyondLastLine: false,
+          wordWrap: 'on',
+          automaticLayout: true,
+          tabSize: 2,
+          insertSpaces: true,
+          renderWhitespace: 'none',
+          bracketPairColorization: { enabled: true },
+          autoClosingBrackets: 'always',
+          autoClosingQuotes: 'always',
+          suggestOnTriggerCharacters: true,
+          quickSuggestions: { other: true, comments: false, strings: false },
+          padding: { top: 12, bottom: 12 },
+          scrollbar: {
+            verticalScrollbarSize: 6,
+            horizontalScrollbarSize: 6,
+          },
+          overviewRulerLanes: 0,
+          renderLineHighlight: 'line',
+          cursorBlinking: 'smooth',
+          cursorSmoothCaretAnimation: 'on',
+          smoothScrolling: true,
+          contextmenu: true,
+        }}
+      />
+      
+      {isDragging && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(96, 165, 250, 0.1)',
+          backdropFilter: 'blur(2px)',
+          border: '2px dashed var(--accent)',
+          zIndex: 100,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+        }}>
+          <div style={{
+            background: 'var(--bg-1)',
+            padding: '16px 24px',
+            borderRadius: 'var(--radius-md)',
+            boxShadow: 'var(--shadow-lg)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 8,
+          }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent)' }}>Drop .tex file to load</span>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
+

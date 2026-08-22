@@ -68,59 +68,64 @@ export default function PDFPreview() {
         )}
 
         {!pdfUrl && !isCompiling && (
-          <div className="empty-state" style={{ height: '100%' }}>
-            <div className="empty-state-icon">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                <rect x="8" y="4" width="32" height="40" rx="3" stroke="var(--border-2)" strokeWidth="1.5"/>
-                <path d="M16 14h16M16 20h16M16 26h10" stroke="var(--border-2)" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
+          <div className="empty-state" style={{ height: '100%', background: 'radial-gradient(circle at center, var(--bg-1) 0%, var(--bg-0) 100%)' }}>
+            <div style={{ background: 'var(--bg-glass)', backdropFilter: 'blur(8px)', padding: '40px', borderRadius: '16px', border: '1px solid var(--border-1)', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: 'var(--shadow-lg)' }}>
+              <div className="empty-state-icon" style={{ color: 'var(--accent)', opacity: 0.8, filter: 'drop-shadow(0 0 10px var(--accent-dim))' }}>
+                <svg width="56" height="56" viewBox="0 0 48 48" fill="none">
+                  <rect x="8" y="4" width="32" height="40" rx="4" stroke="currentColor" strokeWidth="2"/>
+                  <path d="M16 14h16M16 20h16M16 26h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M30 34h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div className="empty-state-title" style={{ fontSize: 18, marginTop: 12 }}>Ready to Compile</div>
+              <div className="empty-state-desc" style={{ marginTop: 8, marginBottom: 20 }}>
+                Write or paste LaTeX in the editor, or use the Fill Form feature, then click Compile to render your PDF here.
+              </div>
+              <button className="btn btn-primary btn-lg" onClick={compile}>
+                Compile PDF
+              </button>
             </div>
-            <div className="empty-state-title">No preview yet</div>
-            <div className="empty-state-desc">
-              Write or paste LaTeX in the editor, then click Compile to render your PDF preview here.
-            </div>
-            <button className="btn btn-primary" style={{ marginTop: 4 }} onClick={compile}>
-              Compile Now
-            </button>
           </div>
         )}
 
         {compilationError && !isCompiling && (
-          <div className="empty-state" style={{ height: '100%' }}>
-            <div className="empty-state-icon">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                <circle cx="24" cy="24" r="20" stroke="var(--error)" strokeWidth="1.5" opacity="0.5"/>
-                <path d="M24 14v14M24 32v2" stroke="var(--error)" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
+          <div className="empty-state" style={{ height: '100%', background: 'radial-gradient(circle at center, var(--bg-1) 0%, var(--bg-0) 100%)' }}>
+            <div style={{ background: 'var(--bg-glass)', backdropFilter: 'blur(8px)', padding: '40px', borderRadius: '16px', border: '1px solid var(--border-1)', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: 'var(--shadow-lg)' }}>
+              <div className="empty-state-icon" style={{ color: 'var(--error)', opacity: 0.9, filter: 'drop-shadow(0 0 15px var(--error-dim))' }}>
+                <svg width="56" height="56" viewBox="0 0 48 48" fill="none">
+                  <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="2" fill="var(--error-dim)"/>
+                  <path d="M24 14v10M24 30v2" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div className="empty-state-title" style={{ color: 'var(--error)', fontSize: 18, marginTop: 12 }}>Compilation Failed</div>
+              <div className="empty-state-desc" style={{ maxWidth: 350, marginTop: 8, color: 'var(--text-1)' }}>
+                The compilation service encountered an error or is unavailable. Check the log below or try compiling in the cloud.
+              </div>
+              <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+                <button className="btn btn-secondary btn-lg" onClick={compile}>
+                  Retry
+                </button>
+                <button className="btn btn-primary btn-lg" onClick={() => cloudFormRef.current?.submit()} style={{ background: 'var(--text-0)', color: 'var(--bg-0)' }}>
+                  Open in Overleaf
+                </button>
+              </div>
+              <form 
+                ref={cloudFormRef} 
+                action="https://www.overleaf.com/docs" 
+                method="POST" 
+                target="_blank" 
+                style={{ display: 'none' }}
+              >
+                <input type="hidden" name="snip" value={latexCode} />
+              </form>
             </div>
-            <div className="empty-state-title" style={{ color: 'var(--error)' }}>Compilation failed</div>
-            <div className="empty-state-desc" style={{ maxWidth: 350 }}>
-              The compilation service is currently unavailable.
-              You can instantly compile your document using an external cloud compiler.
-            </div>
-            <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-              <button className="btn btn-secondary btn-sm" onClick={compile}>
-                Retry Local
-              </button>
-              <button className="btn btn-primary btn-sm" onClick={() => cloudFormRef.current?.submit()}>
-                Compile in Cloud
-              </button>
-            </div>
-            <form 
-              ref={cloudFormRef} 
-              action="https://www.overleaf.com/docs" 
-              method="POST" 
-              target="_blank" 
-              style={{ display: 'none' }}
-            >
-              <input type="hidden" name="snip" value={latexCode} />
-            </form>
           </div>
         )}
 
         {pdfUrl && !isCompiling && (
           <iframe
-            src={pdfUrl}
+            name={pdfUrl === 'iframe' ? 'resumetex-pdf-frame' : undefined}
+            src={pdfUrl !== 'iframe' ? pdfUrl : undefined}
             title="Compiled PDF Preview"
             style={{
               width: '100%',

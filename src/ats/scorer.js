@@ -100,13 +100,19 @@ export function scoreATS(latex) {
     suggestions.push({ type: 'warning', text: 'No quantified achievements found. Numbers and metrics make your resume 2x more impactful.' })
   }
 
-  // 9. Document length estimate (word count proxy)
-  const words = latex.replace(/\\[a-zA-Z]+(\[.*?\]|\{.*?\})*/g, ' ').replace(/[^a-zA-Z\s]/g, ' ').split(/\s+/).filter(Boolean)
+  // 9. Document length estimate (word count of document body)
+  const body = latex.split(/\\begin\{document\}/i)[1] || latex
+  const words = body
+    .replace(/\\[a-zA-Z@]+/g, ' ')
+    .replace(/[{}\[\]%]/g, ' ')
+    .replace(/[^a-zA-Z\s]/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 1)
   const wordCount = words.length
-  if (wordCount >= 300 && wordCount <= 800) score += 8
-  else if (wordCount < 300) {
+  if (wordCount >= 180 && wordCount <= 900) score += 8
+  else if (wordCount < 180) {
     score += 3
-    suggestions.push({ type: 'info', text: 'Resume appears very short. Aim for 400-700 words for a strong one-page resume.' })
+    suggestions.push({ type: 'info', text: 'Resume appears short. Add internships, projects, or coursework if you are early-career; otherwise expand achievements.' })
   } else if (wordCount > 1200) {
     score += 3
     suggestions.push({ type: 'warning', text: 'Resume may exceed 2 pages. Keep it concise — 1 page for < 10 years experience, 2 pages maximum.' })
@@ -135,4 +141,43 @@ export function scoreATS(latex) {
   else { grade = 'F'; color = '#f85149' }
 
   return { score, grade, color, suggestions, bulletCount: bullets.length, wordCount }
+}
+
+const STOPWORDS = new Set([
+  'the', 'and', 'for', 'with', 'that', 'this', 'from', 'your', 'you', 'are', 'was',
+  'were', 'have', 'has', 'will', 'can', 'our', 'their', 'they', 'who', 'what',
+  'when', 'where', 'which', 'into', 'about', 'over', 'after', 'before', 'than',
+  'then', 'also', 'more', 'most', 'other', 'such', 'only', 'using', 'used',
+  'work', 'role', 'team', 'job', 'jobs', 'experience', 'required', 'requirements',
+  'including', 'include', 'ability', 'strong', 'good', 'well', 'plus', 'etc',
+])
+
+/**
+ * Compare resume text against a pasted job description and return keyword coverage.
+ */
+export function scoreJobKeywords(latex, jobDescription) {
+  const jd = (jobDescription || '').toLowerCase()
+  if (jd.trim().length < 20) {
+    return { matched: [], missing: [], coverage: null, total: 0 }
+  }
+
+  const tokens = jd
+    .replace(/[^a-z0-9+#.\s-]/g, ' ')
+    .split(/[\s,/|]+/)
+    .map((t) => t.trim())
+    .filter((t) => t.length >= 3 && !STOPWORDS.has(t) && !/^\d+$/.test(t))
+
+  const unique = [...new Set(tokens)].slice(0, 40)
+  const hay = latex.toLowerCase()
+  const matched = []
+  const missing = []
+  unique.forEach((term) => {
+    const re = new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i')
+    if (re.test(hay)) matched.push(term)
+    else missing.push(term)
+  })
+
+  const total = unique.length
+  const coverage = total ? Math.round((matched.length / total) * 100) : 0
+  return { matched, missing: missing.slice(0, 18), coverage, total }
 }
