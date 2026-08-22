@@ -7,6 +7,7 @@ export default function Header() {
   const setShowFillForm = useStore((s) => s.setShowFillForm)
   const setShowTemplateGallery = useStore((s) => s.setShowTemplateGallery)
   const setShowThemePicker = useStore((s) => s.setShowThemePicker)
+  const setShowAiHelp = useStore((s) => s.setShowAiHelp)
   const showLog = useStore((s) => s.showLog)
   const setShowLog = useStore((s) => s.setShowLog)
   const atsScore = useStore((s) => s.atsScore)
@@ -69,6 +70,20 @@ export default function Header() {
           <path d="M4 5h6M4 7h6M4 9h3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
         </svg>
         Fill Form
+      </button>
+
+      {/* AI Help button */}
+      <button
+        id="ai-help-btn"
+        className="btn btn-secondary"
+        onClick={() => setShowAiHelp(true)}
+        data-tooltip="Get AI Prompts for Customizations"
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <path d="M7 1L8.5 5.5L13 7L8.5 8.5L7 13L5.5 8.5L1 7L5.5 5.5L7 1Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+          <path d="M12.5 11L13 12.5L14.5 13L13 13.5L12.5 15L12 13.5L10.5 13L12 12.5L12.5 11Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+        </svg>
+        AI Help
       </button>
 
       {/* Templates */}

@@ -8,6 +8,7 @@ import ATSScorer from './components/ATS/ATSScorer.jsx'
 import FillFormModal from './components/FillForm/FillFormModal.jsx'
 import TemplateGallery from './components/Templates/TemplateGallery.jsx'
 import ThemePicker from './components/Themes/ThemePicker.jsx'
+import AIHelpSidebar from './components/AI/AIHelpSidebar.jsx'
 
 export default function App() {
   const showFillForm = useStore((s) => s.showFillForm)
@@ -132,6 +133,7 @@ export default function App() {
       {showFillForm && <FillFormModal />}
       {showTemplateGallery && <TemplateGallery />}
       {showThemePicker && <ThemePicker />}
+      <AIHelpSidebar />
     </div>
   )
 }

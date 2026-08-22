@@ -1,10 +1,36 @@
 # ResumeTeX
 
-A professional LaTeX resume editor built for the browser. No login required. No data stored on any server.
+A professional, AI-powered LaTeX resume editor built for the browser. No login required. No data stored on any server. 
 
-Write LaTeX directly or use the Fill Form feature to generate an AI prompt, get complete LaTeX code from any AI assistant, paste it back into the editor, compile, and download your resume.
+ResumeTeX is specifically built to be the ultimate resume builder, combining the pixel-perfect formatting of LaTeX with the ease of AI generation and real-time ATS scoring.
 
 **Live site:** https://navaneethan-p.github.io/ResumeTeX
+
+---
+
+## See it in Action
+
+![ResumeTeX Interface](public/assets/screenshot.png)
+
+*Watch the video demo below to see the AI features and Theme switching in action:*
+
+![ResumeTeX Demo](public/assets/demo.webp)
+
+---
+
+## Why ResumeTeX beats Overleaf (for Resumes)
+
+While Overleaf is fantastic for general-purpose research papers, ResumeTeX is purpose-built to get you hired. Here is why ResumeTeX is better for building resumes:
+
+| Feature | ResumeTeX | Overleaf |
+|---|---|---|
+| **AI Prompt Generation** | Built-in form to generate structured AI prompts to write your resume | ❌ None |
+| **AI Customization Assistant** | Sidebar with 1-click prompt templates to change fonts, colors, and layout | ❌ None |
+| **ATS Scoring** | Built-in real-time ATS compatibility checker (11 rules) | ❌ None |
+| **Templates & Themes** | 6 curated templates and 15 color themes applied instantly with 1-click | ❌ Manual setup required |
+| **Privacy & Accounts** | No login required. Total privacy. | ⚠️ Account required, data stored on their servers |
+| **Encryption** | Client-side AES-256-GCM encryption for downloaded `.tex` files | ❌ None |
+| **File Size** | Lightweight, lightning fast | ⚠️ Heavy, general purpose |
 
 ---
 
@@ -12,13 +38,14 @@ Write LaTeX directly or use the Fill Form feature to generate an AI prompt, get 
 
 - Monaco code editor with LaTeX syntax highlighting and autocomplete
 - Fill Form that generates a structured AI prompt — paste into ChatGPT or Claude to get complete LaTeX code
+- AI Help Sidebar to instantly copy prompts for deep LaTeX customizations
+- Premium White/Light UI with glassmorphism design
 - Live PDF compilation via latex.online (no backend required)
 - 6 professionally designed resume templates
 - 15 color themes applied to both the UI and your LaTeX document
 - ATS compatibility scorer with 11 rules and actionable suggestions
 - Export as PDF, raw .tex file, clipboard copy, or AES-256-GCM encrypted .tex file
 - Resizable split-pane editor and preview
-- No login, no accounts, no cookies, no analytics on document content
 - Client-side end-to-end encryption using the native Web Crypto API
 
 ---
@@ -32,9 +59,10 @@ Write LaTeX directly or use the Fill Form feature to generate an AI prompt, get 
    - Click **Copy Prompt** and paste it into ChatGPT, Claude, or any AI assistant
    - The AI will return complete LaTeX code
    - Click **Paste AI Response**, paste the code, and click **Use in Editor**
-3. Customize using the Templates and Theme pickers
-4. Press **Ctrl+Enter** or click **Compile** to render a PDF preview
-5. Use **Export** to download your PDF, .tex file, or an encrypted copy
+3. Need to tweak something? Click **AI Help** in the header to get prompts for changing fonts, colors, or adding sections.
+4. Customize using the Templates and Theme pickers.
+5. Press **Ctrl+Enter** or click **Compile** to render a PDF preview.
+6. Use **Export** to download your PDF, .tex file, or an encrypted copy.
 
 ---
 
@@ -73,15 +101,13 @@ The production build is output to the `dist/` directory and can be served from a
 
 ## LaTeX Compilation
 
-The editor sends your LaTeX source to the [latex.online](https://latex.online) free public API for compilation. If that service is unavailable, a fallback to latexonline.cc is attempted for shorter documents.
+The editor sends your LaTeX source to the [latex.online](https://latex.online) free public API for compilation. If that service is unavailable, a robust iframe fallback is utilized to ensure compilation succeeds even with strict CORS policies.
 
 To compile entirely offline, copy your `.tex` source and compile locally with:
 
 ```bash
 pdflatex resume.tex
 ```
-
-Or paste your code into [Overleaf](https://overleaf.com) for cloud compilation.
 
 ---
 
@@ -103,28 +129,6 @@ To decrypt an encrypted file, use the built-in load feature and enter your passp
 | Academic CV | Research / Academia | High |
 | Technical / Engineering | Engineering / DevOps | High |
 | Executive | Senior Leadership / C-Suite | High |
-
----
-
-## Project Structure
-
-```
-src/
-  components/
-    ATS/            ATS scorer panel
-    Editor/         Monaco editor
-    Export/         Export dropdown
-    FillForm/       Fill Form modal and AI prompt generator
-    Header/         App header
-    Preview/        PDF preview and compilation log
-    Templates/      Template gallery modal
-    Themes/         Theme picker modal
-  templates/        Six LaTeX resume template files
-  themes/           15 color theme definitions
-  ats/              ATS scoring rule engine (11 rules)
-  crypto/           AES-256-GCM client-side encryption utilities
-  store/            Zustand global state
-```
 
 ---
 
@@ -153,15 +157,3 @@ MIT License. See [LICENSE](./LICENSE) for full text.
 **Navaneethan P**
 
 GitHub: https://github.com/Navaneethan-P
-
----
-
-## Contributing
-
-Pull requests are welcome. For major changes, open an issue first to discuss the proposed change.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a pull request

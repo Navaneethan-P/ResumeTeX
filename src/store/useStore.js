@@ -196,6 +196,7 @@ export const useStore = create((set, get) => ({
   showTemplateGallery: false,
   showThemePicker: false,
   showHelp: false,
+  showAiHelp: false,
   showWelcome: typeof window !== 'undefined' && !localStorage.getItem('resumetex-welcome-v1'),
   showLog: false,
   showAts: draft?.showAts !== undefined ? draft.showAts : true,
@@ -206,6 +207,7 @@ export const useStore = create((set, get) => ({
   setShowTemplateGallery: (v) => set({ showTemplateGallery: v }),
   setShowThemePicker: (v) => set({ showThemePicker: v }),
   setShowHelp: (v) => set({ showHelp: v }),
+  setShowAiHelp: (v) => set({ showAiHelp: v }),
   dismissWelcome: () => {
     try { localStorage.setItem('resumetex-welcome-v1', '1') } catch { /* ignore */ }
     set({ showWelcome: false })

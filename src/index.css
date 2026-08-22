@@ -27,38 +27,38 @@ body {
    CSS CUSTOM PROPERTIES (THEME TOKENS)
    ============================================= */
 :root {
-  /* Background layers (Premium Dark/Slate) */
-  --bg-0: #0a0a0c;
-  --bg-1: #121216;
-  --bg-2: #1a1a20;
-  --bg-3: #24242c;
-  --bg-4: #2e2e38;
-  --bg-glass: rgba(18, 18, 22, 0.75);
+  /* Background layers (Premium Light) */
+  --bg-0: #f8fafc;
+  --bg-1: #ffffff;
+  --bg-2: #f1f5f9;
+  --bg-3: #e2e8f0;
+  --bg-4: #cbd5e1;
+  --bg-glass: rgba(255, 255, 255, 0.85);
 
   /* Borders */
-  --border-0: #24242c;
-  --border-1: #2e2e38;
-  --border-2: #3f3f4e;
+  --border-0: #e2e8f0;
+  --border-1: #cbd5e1;
+  --border-2: #94a3b8;
 
   /* Text */
-  --text-0: #f4f4f5;
-  --text-1: #a1a1aa;
-  --text-2: #71717a;
-  --text-3: #52525b;
+  --text-0: #0f172a;
+  --text-1: #334155;
+  --text-2: #475569;
+  --text-3: #64748b;
 
   /* Accent */
-  --accent: #60a5fa;
-  --accent-hover: #93c5fd;
-  --accent-dim: rgba(96, 165, 250, 0.15);
-  --accent-dim-hover: rgba(96, 165, 250, 0.25);
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-dim: rgba(37, 99, 235, 0.15);
+  --accent-dim-hover: rgba(37, 99, 235, 0.25);
 
   /* Status */
-  --success: #34d399;
-  --success-dim: rgba(52, 211, 153, 0.15);
-  --warning: #fbbf24;
-  --warning-dim: rgba(251, 191, 36, 0.15);
-  --error: #f87171;
-  --error-dim: rgba(248, 113, 113, 0.15);
+  --success: #10b981;
+  --success-dim: rgba(16, 185, 129, 0.15);
+  --warning: #f59e0b;
+  --warning-dim: rgba(245, 158, 11, 0.15);
+  --error: #ef4444;
+  --error-dim: rgba(239, 68, 68, 0.15);
 
   /* Layout */
   --header-height: 60px;
@@ -72,11 +72,11 @@ body {
   --radius-lg: 12px;
 
   /* Shadows */
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
-  --shadow-md: 0 8px 16px rgba(0,0,0,0.5);
-  --shadow-lg: 0 16px 32px rgba(0,0,0,0.6);
-  --shadow-xl: 0 24px 48px rgba(0,0,0,0.8);
-  --shadow-glow: 0 0 15px var(--accent-dim);
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 8px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 16px 32px rgba(0,0,0,0.1);
+  --shadow-xl: 0 24px 48px rgba(0,0,0,0.15);
+  --shadow-glow: 0 4px 15px var(--accent-dim);
 
   /* Transitions */
   --t: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -191,13 +191,13 @@ code, pre, .mono {
 
 .btn-primary {
   background: var(--accent);
-  color: #000;
+  color: #fff;
   font-weight: 700;
   box-shadow: var(--shadow-glow);
 }
 .btn-primary:hover {
   background: var(--accent-hover);
-  box-shadow: 0 0 25px var(--accent-dim-hover);
+  box-shadow: 0 4px 25px var(--accent-dim-hover);
 }
 
 .btn-secondary {
@@ -318,7 +318,7 @@ textarea.input {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(15, 23, 42, 0.4);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 1000;
