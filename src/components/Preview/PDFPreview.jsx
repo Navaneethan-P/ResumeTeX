@@ -7,7 +7,7 @@ export default function PDFPreview() {
   const compile = useStore((s) => s.compile)
   const compilationError = useStore((s) => s.compilationError)
   const latexCode = useStore((s) => s.latexCode)
-  const overleafFormRef = useRef(null)
+  const cloudFormRef = useRef(null)
 
   return (
     <div style={{
@@ -96,18 +96,18 @@ export default function PDFPreview() {
             <div className="empty-state-title" style={{ color: 'var(--error)' }}>Compilation failed</div>
             <div className="empty-state-desc" style={{ maxWidth: 350 }}>
               The compilation service is currently unavailable.
-              You can instantly compile your document on Overleaf using the button below.
+              You can instantly compile your document using an external cloud compiler.
             </div>
             <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
               <button className="btn btn-secondary btn-sm" onClick={compile}>
                 Retry Local
               </button>
-              <button className="btn btn-primary btn-sm" onClick={() => overleafFormRef.current?.submit()}>
-                Compile on Overleaf
+              <button className="btn btn-primary btn-sm" onClick={() => cloudFormRef.current?.submit()}>
+                Compile in Cloud
               </button>
             </div>
             <form 
-              ref={overleafFormRef} 
+              ref={cloudFormRef} 
               action="https://www.overleaf.com/docs" 
               method="POST" 
               target="_blank" 

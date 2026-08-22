@@ -74,7 +74,7 @@ export const useStore = create((set, get) => ({
       } else {
         set({
           isCompiling: false,
-          compilationLog: `Compilation failed: ${err.message}\n\nThe compilation service may be unavailable or a CORS policy is blocking the request. You can copy your LaTeX code and compile it at overleaf.com or any local TeX installation.`,
+          compilationLog: `Compilation failed: ${err.message}\n\nThe compilation service may be unavailable or a CORS policy is blocking the request. You can use the "Compile in Cloud" button to generate your PDF.`,
           compilationError: true,
         })
       }
