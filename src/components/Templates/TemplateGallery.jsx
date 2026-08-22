@@ -1,12 +1,10 @@
 import { useStore } from '../../store/useStore.js'
 
 export default function TemplateGallery() {
-  const { templates, currentTemplateId, applyTemplate, setShowTemplateGallery } = useStore((s) => ({
-    templates: s.templates,
-    currentTemplateId: s.currentTemplateId,
-    applyTemplate: s.applyTemplate,
-    setShowTemplateGallery: s.setShowTemplateGallery,
-  }))
+  const templates = useStore((s) => s.templates)
+  const currentTemplateId = useStore((s) => s.currentTemplateId)
+  const applyTemplate = useStore((s) => s.applyTemplate)
+  const setShowTemplateGallery = useStore((s) => s.setShowTemplateGallery)
 
   const ATS_COLORS = { high: '#3fb950', medium: '#d29922', low: '#f85149' }
   const ATS_LABELS = { high: 'ATS High', medium: 'ATS Medium', low: 'ATS Low' }

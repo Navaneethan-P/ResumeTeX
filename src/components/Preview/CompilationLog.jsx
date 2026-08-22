@@ -1,12 +1,10 @@
 import { useStore } from '../../store/useStore.js'
 
 export default function CompilationLog() {
-  const { compilationLog, compilationError, showLog, setShowLog } = useStore((s) => ({
-    compilationLog: s.compilationLog,
-    compilationError: s.compilationError,
-    showLog: s.showLog,
-    setShowLog: s.setShowLog,
-  }))
+  const compilationLog = useStore((s) => s.compilationLog)
+  const compilationError = useStore((s) => s.compilationError)
+  const showLog = useStore((s) => s.showLog)
+  const setShowLog = useStore((s) => s.setShowLog)
 
   const lines = compilationLog ? compilationLog.split('\n') : []
 

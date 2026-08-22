@@ -1,12 +1,10 @@
 import { useStore } from '../../store/useStore.js'
 
 export default function ThemePicker() {
-  const { themes, currentThemeId, applyTheme, setShowThemePicker } = useStore((s) => ({
-    themes: s.themes,
-    currentThemeId: s.currentThemeId,
-    applyTheme: s.applyTheme,
-    setShowThemePicker: s.setShowThemePicker,
-  }))
+  const themes = useStore((s) => s.themes)
+  const currentThemeId = useStore((s) => s.currentThemeId)
+  const applyTheme = useStore((s) => s.applyTheme)
+  const setShowThemePicker = useStore((s) => s.setShowThemePicker)
 
   return (
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setShowThemePicker(false)}>

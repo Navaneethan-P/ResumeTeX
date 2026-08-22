@@ -10,19 +10,11 @@ import TemplateGallery from './components/Templates/TemplateGallery.jsx'
 import ThemePicker from './components/Themes/ThemePicker.jsx'
 
 export default function App() {
-  const {
-    showFillForm,
-    showTemplateGallery,
-    showThemePicker,
-    splitPos,
-    setSplitPos,
-  } = useStore((s) => ({
-    showFillForm: s.showFillForm,
-    showTemplateGallery: s.showTemplateGallery,
-    showThemePicker: s.showThemePicker,
-    splitPos: s.splitPos,
-    setSplitPos: s.setSplitPos,
-  }))
+  const showFillForm = useStore((s) => s.showFillForm)
+  const showTemplateGallery = useStore((s) => s.showTemplateGallery)
+  const showThemePicker = useStore((s) => s.showThemePicker)
+  const splitPos = useStore((s) => s.splitPos)
+  const setSplitPos = useStore((s) => s.setSplitPos)
 
   const containerRef = useRef(null)
   const isDragging = useRef(false)

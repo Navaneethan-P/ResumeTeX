@@ -3,12 +3,10 @@ import { useStore } from '../../store/useStore.js'
 import { downloadTex, downloadEncryptedTex } from '../../crypto/encryption.js'
 
 export default function ExportMenu() {
-  const { latexCode, pdfUrl, compile, isCompiling } = useStore((s) => ({
-    latexCode: s.latexCode,
-    pdfUrl: s.pdfUrl,
-    compile: s.compile,
-    isCompiling: s.isCompiling,
-  }))
+  const latexCode = useStore((s) => s.latexCode)
+  const pdfUrl = useStore((s) => s.pdfUrl)
+  const compile = useStore((s) => s.compile)
+  const isCompiling = useStore((s) => s.isCompiling)
 
   const [open, setOpen] = useState(false)
   const [copiedTex, setCopiedTex] = useState(false)

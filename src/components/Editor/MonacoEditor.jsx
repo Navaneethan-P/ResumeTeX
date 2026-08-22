@@ -1,5 +1,12 @@
-import Editor from '@monaco-editor/react'
+import Editor, { loader } from '@monaco-editor/react'
 import { useStore } from '../../store/useStore.js'
+
+// Pin Monaco to a specific CDN version to avoid loading failures
+loader.config({
+  paths: {
+    vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs',
+  },
+})
 
 const LATEX_SNIPPETS = [
   { label: '\\section{}', insertText: '\\\\section{$1}', detail: 'Section heading' },
@@ -90,11 +97,9 @@ function beforeMount(monaco) {
 }
 
 export default function MonacoEditor() {
-  const { latexCode, setLatexCode, compile } = useStore((s) => ({
-    latexCode: s.latexCode,
-    setLatexCode: s.setLatexCode,
-    compile: s.compile,
-  }))
+  const latexCode = useStore((s) => s.latexCode)
+  const setLatexCode = useStore((s) => s.setLatexCode)
+  const compile = useStore((s) => s.compile)
 
   const handleMount = (editor, monaco) => {
     // Ctrl+Enter = compile

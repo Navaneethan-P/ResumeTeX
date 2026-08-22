@@ -1,12 +1,10 @@
 import { useStore } from '../../store/useStore.js'
 
 export default function PDFPreview() {
-  const { pdfUrl, isCompiling, compile, compilationError } = useStore((s) => ({
-    pdfUrl: s.pdfUrl,
-    isCompiling: s.isCompiling,
-    compile: s.compile,
-    compilationError: s.compilationError,
-  }))
+  const pdfUrl = useStore((s) => s.pdfUrl)
+  const isCompiling = useStore((s) => s.isCompiling)
+  const compile = useStore((s) => s.compile)
+  const compilationError = useStore((s) => s.compilationError)
 
   return (
     <div style={{

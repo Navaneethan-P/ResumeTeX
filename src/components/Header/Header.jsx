@@ -2,27 +2,16 @@ import { useStore } from '../../store/useStore.js'
 import ExportMenu from '../Export/ExportMenu.jsx'
 
 export default function Header() {
-  const {
-    compile, isCompiling,
-    setShowFillForm,
-    setShowTemplateGallery,
-    setShowThemePicker,
-    showLog, setShowLog,
-    atsScore,
-    currentThemeId,
-    themes,
-  } = useStore((s) => ({
-    compile: s.compile,
-    isCompiling: s.isCompiling,
-    setShowFillForm: s.setShowFillForm,
-    setShowTemplateGallery: s.setShowTemplateGallery,
-    setShowThemePicker: s.setShowThemePicker,
-    showLog: s.showLog,
-    setShowLog: s.setShowLog,
-    atsScore: s.atsScore,
-    currentThemeId: s.currentThemeId,
-    themes: s.themes,
-  }))
+  const compile = useStore((s) => s.compile)
+  const isCompiling = useStore((s) => s.isCompiling)
+  const setShowFillForm = useStore((s) => s.setShowFillForm)
+  const setShowTemplateGallery = useStore((s) => s.setShowTemplateGallery)
+  const setShowThemePicker = useStore((s) => s.setShowThemePicker)
+  const showLog = useStore((s) => s.showLog)
+  const setShowLog = useStore((s) => s.setShowLog)
+  const atsScore = useStore((s) => s.atsScore)
+  const currentThemeId = useStore((s) => s.currentThemeId)
+  const themes = useStore((s) => s.themes)
 
   const currentTheme = themes.find((t) => t.id === currentThemeId)
   const score = atsScore?.score ?? 0
